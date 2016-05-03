@@ -24,9 +24,9 @@
 	 * Description of paragraph format.
 	 *
 	 * @prop {String} title Format title (will be translated)
-	 * @prop {String} [tag] Name of paragraph HTML tag. If not specified default tag is used.
-	 * @prop {String} [class=''] List of paragraph classes divided by space
-	 * @prop {String} [id=''] HTML `id` attribute value
+	 * @prop {String|null} [tag] Name of paragraph HTML tag. If not specified default tag is used.
+	 * @prop {String|null} [class] List of paragraph classes divided by space
+	 * @prop {String|null} [id] HTML `id` attribute value
 	 */
 
 	/**
