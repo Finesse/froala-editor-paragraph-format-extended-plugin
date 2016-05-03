@@ -1,6 +1,6 @@
 # Froala Paragraph Format Extended plugin
 
-This is a plugin for [Froala Editor](https://www.froala.com/wysiwyg-editor/) that is like a mixture of `paragraphFormat` plugin and `paragraphStyle` plugin with some extended features. It allows to set paragraph tag name, class and id from a list of formats.
+This is a plugin for [Froala Editor](https://www.froala.com/wysiwyg-editor/) that is like a mixture of `paragraphFormat` and `paragraphStyle` plugins with some extended features. It allows to set paragraph tag name, class and ID from a list of formats.
 
 
 ## Getting started
@@ -21,7 +21,7 @@ This is a plugin for [Froala Editor](https://www.froala.com/wysiwyg-editor/) tha
 <script type="text/javascript" src="../js/plugins/paragraph_format_ext.min.js"></script>
 ```
 
-3. Create editor, add paragraphFormatExt button to the toolbar and set up formats list:
+3. Create editor, add `paragraphFormatExt` button to the toolbar and set up formats list:
 
 ```html
 <textarea id="editor"></textarea>
@@ -44,13 +44,14 @@ This is a plugin for [Froala Editor](https://www.froala.com/wysiwyg-editor/) tha
 
 The name of the toolbar button of this plugin is `paragraphFormatExt`.
 
-When paragraph format is changed by user via dropdown the `class` and `id` attributes of selected paragraphs are purged and replaced by chosen format values even if chosen they are not set.
+When paragraph format is changed by user via dropdown the `class` and `id` attributes of selected paragraphs are purged and replaced by chosen format values even if they are not set.
 
 ### Options
 
 #### paragraphFormatExt
 
 **Type**: `Array`
+
 **Default value:**
 
 ```javascript
@@ -67,14 +68,15 @@ When paragraph format is changed by user via dropdown the `class` and `id` attri
 
 An list with the formats that will appear in the Paragraph Format Extended dropdown from the toolbar. Array items are objects with this properties:
 
-* `title` **(String, required)** — Format title that is shown in the dropdown. It is [transleted by Froala Editor](https://www.froala.com/wysiwyg-editor/docs/methods#language.translate) before displaying;
-* `tag` **(String|Null)** — Paragraph tag name. If `null` or nothing is provided the default editor tag is used;
-* `class` **(String|Null)** — Paragraph CSS class name. May contain multiple classes devided by space;
-* `id` **(String|Null)** — The value of paragraph `id` HTML attribute.
+* `title` (String, required) — Format title that is shown in the dropdown. It is [translated by Froala Editor](https://www.froala.com/wysiwyg-editor/docs/methods#language.translate) before displaying;
+* `tag` (String|Null) — Paragraph tag name. If `null` or nothing is provided the default editor tag is used;
+* `class` (String|Null) — Paragraph CSS class name. May contain multiple classes devided by space;
+* `id` (String|Null) — The value of paragraph `id` HTML attribute.
 
 #### paragraphFormatExtSelection
 
 **Type**: `Boolean`
+
 **Default value:** `false`
 
 Should the Paragraph Format Extended button from the toolbar be replaced with a dropdown showing the actual paragraph format name for the current text selection.
