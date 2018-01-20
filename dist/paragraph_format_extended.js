@@ -3,26 +3,41 @@
  * (https://github.com/FinesseRus/froala-editor-paragraph-format-extended-plugin) Copyright 2016-2018 Surgie Finesse
  * Licensed under the MIT license
  */
-(function(){
-'use strict';
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 (function (global, factory) {
-	(typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? factory(require('jquery'), require('froala-editor')) : typeof define === 'function' && define.amd ? define(['jquery', 'froala-editor'], factory) : factory(global.jQuery);
-})(undefined, function ($) {
+	if (typeof define === "function" && define.amd) {
+		define(['jquery', 'froala-editor'], factory);
+	} else if (typeof exports !== "undefined") {
+		factory(require('jquery'), require('froala-editor'));
+	} else {
+		var mod = {
+			exports: {}
+		};
+		factory(global.jQuery, global.jQueryFnFroalaEditor);
+		global.paragraph_format_extended = mod.exports;
+	}
+})(this, function (_jquery) {
 	'use strict';
 
-	$ = $ && $.hasOwnProperty('default') ? $['default'] : $;
+	var _jquery2 = _interopRequireDefault(_jquery);
+
+	function _interopRequireDefault(obj) {
+		return obj && obj.__esModule ? obj : {
+			default: obj
+		};
+	}
 
 	var _extends = Object.assign || function (target) {
 		for (var i = 1; i < arguments.length; i++) {
-			var source = arguments[i];for (var key in source) {
+			var source = arguments[i];
+
+			for (var key in source) {
 				if (Object.prototype.hasOwnProperty.call(source, key)) {
 					target[key] = source[key];
 				}
 			}
-		}return target;
+		}
+
+		return target;
 	};
 
 	/**
@@ -54,7 +69,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   *
   * @see https://www.froala.com/wysiwyg-editor/docs/concepts/create-plugin More info
   */
-	$.FroalaEditor.DEFAULTS = _extends({}, $.FroalaEditor.DEFAULTS, {
+	_jquery2.default.FroalaEditor.DEFAULTS = _extends({}, _jquery2.default.FroalaEditor.DEFAULTS, {
 		paragraphFormatExtended: [{ title: 'Normal' }, { tag: 'h1', title: 'Heading 1' }, { tag: 'h2', title: 'Heading 2' }, { tag: 'h3', title: 'Heading 3' }, { tag: 'h4', title: 'Heading 4' }, { tag: 'h4', 'class': 'fr-text-bordered', title: 'Header 4 bordered' }, { tag: 'pre', title: 'Code' }],
 		paragraphFormatExtendedSelection: false
 	});
@@ -65,7 +80,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   * @param {FroalaEditor} editor The Froala Editor instance
   * @see https://www.froala.com/wysiwyg-editor/docs/concepts/create-plugin More info
   */
-	$.FroalaEditor.PLUGINS.paragraphFormatExtended = function (editor) {
+	_jquery2.default.FroalaEditor.PLUGINS.paragraphFormatExtended = function (editor) {
 		/**
    * Applies format to the currently selected paragraphs.
    *
@@ -80,7 +95,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 			editor.html.wrap(true, true, true, true);
 			editor.selection.restore();
 
-			var $blocks = $(editor.selection.blocks());
+			var $blocks = (0, _jquery2.default)(editor.selection.blocks());
 
 			// `editor.selection.blocks` returns nested blocks. We need to process only deepest childs to prevent
 			// multiple style applying for nested blocks. This array keeps the list of original and processed blocks. So
@@ -95,7 +110,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 					return;
 				}
 
-				var $block = $(block);
+				var $block = (0, _jquery2.default)(block);
 
 				if ($block.find($blocksToCheck).length) {
 					return;
@@ -125,7 +140,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 			});
 
 			editor.$el.find('pre:not([skip="true"]) + pre:not([skip="true"])').each(function (_, element) {
-				var $element = $(element);
+				var $element = (0, _jquery2.default)(element);
 				$element.prev().append('<br>' + $element.html());
 				$element.remove();
 			});
@@ -224,7 +239,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 			var $blockNew = void 0;
 
 			if ($block.find('ul, ol').length > 0) {
-				$blockNew = $('<' + tag + '>');
+				$blockNew = (0, _jquery2.default)('<' + tag + '>');
 				$block.prepend($blockNew);
 
 				for (var child = editor.node.contents($block[0])[0]; child && ['ul', 'ol'].indexOf(child.tagName.toLowerCase()) === -1;) {
@@ -233,7 +248,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 					child = next;
 				}
 			} else {
-				$blockNew = $('<' + tag + '>').html($block.html());
+				$blockNew = (0, _jquery2.default)('<' + tag + '>').html($block.html());
 				$block.html($blockNew);
 			}
 
@@ -292,7 +307,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 				tag = 'div class="fr-temp-div"' + (editor.node.isEmpty($block[0], true) ? ' data-empty="true"' : '');
 			}
 
-			var $blockNew = $('<' + tag + ' ' + editor.node.attributes($block[0]) + '>').html($block.html());
+			var $blockNew = (0, _jquery2.default)('<' + tag + ' ' + editor.node.attributes($block[0]) + '>').html($block.html());
 			$block.replaceWith($blockNew);
 			return $blockNew;
 		}
@@ -309,14 +324,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   *
   * @see https://www.froala.com/wysiwyg-editor/docs/concepts/custom-button More info
   */
-	$.FroalaEditor.DefineIcon('paragraphFormatExtended', { NAME: 'paragraph' });
+	_jquery2.default.FroalaEditor.DefineIcon('paragraphFormatExtended', { NAME: 'paragraph' });
 
 	/**
   * Defining a plugin button.
   *
   * @see https://www.froala.com/wysiwyg-editor/docs/concepts/custom-button More info
   */
-	$.FroalaEditor.RegisterCommand('paragraphFormatExtended', {
+	_jquery2.default.FroalaEditor.RegisterCommand('paragraphFormatExtended', {
 		/**
    * Action type.
    */
@@ -458,4 +473,3 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		}
 	}
 });
-})();
