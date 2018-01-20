@@ -45,7 +45,9 @@ require.config({
 define('myModule', ['jquery', 'froala-editor-paragraph-format-extended-plugin'], function ($) {
     // ...
 });
-``` 
+```
+
+You can find more information about installation of Froala Editor using AMD [there](https://github.com/froala/wysiwyg-editor/issues/690).
 
 ### NPM
 
@@ -71,14 +73,14 @@ Create an editor, add a `paragraphFormatExtended` button to the toolbar and set 
 ```
 ```js
 $('#editor').froalaEditor({
-	toolbarButtons: $.FroalaEditor.DEFAULTS.toolbarButtons.concat(['paragraphFormatExtended']),
-	paragraphFormatExtended: [
-		{title: 'Normal'},
-		{tag: 'h1', title: 'Heading 1'},
-		{tag: 'h2', title: 'Heading 2'},
-		{tag: 'h2', 'class': 'fr-text-bordered', title: 'Header 2 bordered'},
-		{tag: 'pre', id: 'code', title: 'Code'}
-	]
+    toolbarButtons: $.FroalaEditor.DEFAULTS.toolbarButtons.concat(['paragraphFormatExtended']),
+    paragraphFormatExtended: [
+        {title: 'Normal'},
+        {tag: 'h1', title: 'Heading 1'},
+        {tag: 'h2', title: 'Heading 2'},
+        {tag: 'h2', 'class': 'fr-text-bordered', title: 'Header 2 bordered'},
+        {tag: 'pre', id: 'code', title: 'Code'}
+    ]
 });
 ```
 
@@ -127,7 +129,7 @@ Should the Paragraph Format Extended button from the toolbar be replaced with a 
 
 ### Building
 
-The source code is located in the `src` directory. Do the following to modify and build it:
+The source code is located in the `src` directory. Do the following to modify and compile it:
 
 1. Install [node.js](https://nodejs.org/).
 2. Open a console, go to the project root directory and run `npm install`.
