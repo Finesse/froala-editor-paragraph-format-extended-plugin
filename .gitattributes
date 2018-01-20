@@ -1,0 +1,5 @@
+* text=auto
+
+# Makes all the line breaks in the text files be casted to LF
+*.{js,md,json} text eol=lf
+*.{gitignore,gitattributes} text eol=lf
