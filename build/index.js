@@ -8,7 +8,7 @@ const babelPluginTransformUMD = require('babel-plugin-transform-es2015-modules-u
 const uglifyJS = require('uglify-js');
 
 const copyrightNotice = '/**\n' +
-	' * Froala Editor Paragraph Format Extended plugin v0.0.1 (https://github.com/FinesseRus/froala-editor-paragraph-format-extended-plugin)\n' +
+	' * Froala Editor Paragraph Format Extended plugin v0.1.0 (https://github.com/FinesseRus/froala-editor-paragraph-format-extended-plugin)\n' +
 	' * Copyright 2016-2018 Surgie Finesse\n' +
 	' * Licensed under the MIT license\n' +
 	' */\n';
