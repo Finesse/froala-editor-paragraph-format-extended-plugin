@@ -1,7 +1,7 @@
 {
   "name": "froala-editor-paragraph-format-extended-plugin",
   "version": "0.0.1",
-  "description": "A plugin for Froala Editor which lets choose paragraph format (tag name, class, etc.) from a list",
+  "description": "A plugin for Froala Editor that allows to choose paragraph format (tag name, class, etc.) from a list",
   "main": "dist/paragraph_format_extended.js",
   "scripts": {
     "build": "node build/index.js"
@@ -12,11 +12,11 @@
   },
   "keywords": [
     "Froala Editor",
-    "Plugin",
-    "Format",
-    "Style",
-    "Text",
-    "Paragraph"
+    "plugin",
+    "format",
+    "style",
+    "text",
+    "paragraph"
   ],
   "author": {
     "name": "Surgie Finesse",
