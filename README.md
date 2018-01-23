@@ -49,7 +49,7 @@ define('myModule', ['jquery', 'froala-editor-paragraph-format-extended-plugin'],
 
 You can find more information about installation of Froala Editor using AMD [there](https://github.com/froala/wysiwyg-editor/issues/690).
 
-### NPM
+### Node.js/NPM
 
 Install the plugin:
 
