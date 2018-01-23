@@ -1,6 +1,6 @@
 # [Froala Editor](http://github.com/froala/wysiwyg-editor/) Paragraph Format Extended plugin
 
-A plugin for [Froala Editor](https://www.froala.com/wysiwyg-editor/) that allows to choose paragraph format (tag name, 
+A plugin for Froala WYSIWYG Editor v2 that allows to choose paragraph format (tag name, 
 class, etc.) from a list. It is like a mixture of the `paragraphFormat` and the `paragraphStyle` plugins with some 
 extended features.
 
