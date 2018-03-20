@@ -35,7 +35,8 @@ new Promise((resolve, reject) => {
 				globals: {
 					jquery: 'jQuery',
 					'froala-editor': 'jQuery.fn.froalaEditor'
-				}
+				},
+				exactGlobals: true
 			}]
 		]
 	}, (error, {code}) => {

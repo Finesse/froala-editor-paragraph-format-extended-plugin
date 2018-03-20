@@ -12,7 +12,7 @@
 		var mod = {
 			exports: {}
 		};
-		factory(global.jQuery, global.jQueryFnFroalaEditor);
+		factory(global.jQuery, global.jQuery.fn.froalaEditor);
 		global.paragraph_format_extended = mod.exports;
 	}
 })(this, function (_jquery) {
