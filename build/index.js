@@ -1,11 +1,6 @@
 const fs = require('fs');
 const babel = require('babel-core');
-const babelPresetES2015 = require('babel-preset-es2015');
-const babelPresetES2016 = require('babel-preset-es2016');
-const babelPresetES2017 = require('babel-preset-es2017');
-const babelPluginTransformRestSpread = require('babel-plugin-transform-object-rest-spread');
-const babelPluginTransformUMD = require('babel-plugin-transform-es2015-modules-umd');
-const uglifyJS = require('uglify-js');
+const uglifyES = require('uglify-es');
 
 const copyrightNotice = '/**\n' +
 	' * Froala Editor Paragraph Format Extended plugin v0.1.0 (https://github.com/FinesseRus/froala-editor-paragraph-format-extended-plugin)\n' +
@@ -15,13 +10,34 @@ const copyrightNotice = '/**\n' +
 
 new Promise((resolve, reject) => {
 	babel.transformFile('./src/paragraph_format_extended.js', {
-		presets: [babelPresetES2017, babelPresetES2016, babelPresetES2015],
-		plugins: [babelPluginTransformRestSpread, [babelPluginTransformUMD, {
-			globals: {
-				jquery: 'jQuery',
-				'froala-editor': 'jQuery.fn.froalaEditor'
-			}
-		}]]
+		presets: [
+			['env', {
+				targets: {
+					// According to https://github.com/froala/wysiwyg-editor#browser-support
+					browsers: [
+						'last 2 Chrome major versions',
+						'last 2 Edge major versions',
+						'last 2 Firefox major versions',
+						'last 2 Safari major versions',
+						'last 2 Opera major versions',
+						'IE >= 10',
+						'last 2 iOS major versions',
+						'last 2 ChromeAndroid major versions',
+						'last 2 FirefoxAndroid major versions',
+						'last 2 Android major versions'
+					]
+				}
+			}]
+		],
+		plugins: [
+			'transform-object-rest-spread',
+			['transform-es2015-modules-umd', {
+				globals: {
+					jquery: 'jQuery',
+					'froala-editor': 'jQuery.fn.froalaEditor'
+				}
+			}]
+		]
 	}, (error, {code}) => {
 		if (error) return reject(error);
 		resolve(code);
@@ -33,7 +49,7 @@ new Promise((resolve, reject) => {
 			resolve(code);
 		});
 	}))
-	.then(code => uglifyJS.minify(code))
+	.then(code => uglifyES.minify(code))
 	.then(({code}) => new Promise((resolve, reject) => {
 		fs.writeFile('./dist/paragraph_format_extended.min.js', copyrightNotice + code, error => {
 			if (error) return reject(error);
