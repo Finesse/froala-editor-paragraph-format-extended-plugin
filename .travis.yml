@@ -6,7 +6,7 @@ install:
     - npm install
 
 script:
-    - npm run build
+    - npm run build # However the changes are not published because the NPM package should be the same as the GitHub repository
 
 deploy:
     provider: npm
