@@ -7,6 +7,7 @@ install:
 
 script:
     - npm run build # However the changes are not published because the NPM package should be the same as the GitHub repository
+    - if [[ `git status --porcelain` ]]; then >&2 echo "The actual distributive files differ from the repository files. Could you please build and check them?"; fi
 
 deploy:
     provider: npm
