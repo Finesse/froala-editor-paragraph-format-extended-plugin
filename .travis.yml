@@ -1,0 +1,20 @@
+language: node_js
+node_js:
+    - node
+
+install:
+    - npm install
+
+script:
+    - npm run build # However the changes are not published because the NPM package should be the same as the GitHub repository
+    - if [[ `git status --porcelain` ]]; then echo "The actual distributive files differ from the repository files. Could you please build and check them?" >&2; exit 1; fi
+
+deploy:
+    provider: npm
+    email: finesserus@gmail.com
+    api_key: $NPM_TOKEN
+    on:
+        tags: true
+
+notifications:
+    email: false
