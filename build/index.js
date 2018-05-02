@@ -1,9 +1,10 @@
 const fs = require('fs');
 const babel = require('babel-core');
 const uglifyES = require('uglify-es');
+const {version} = require('../package.json');
 
 const copyrightNotice = '/**\n' +
-	' * Froala Editor Paragraph Format Extended plugin v0.1.0 (https://github.com/FinesseRus/froala-editor-paragraph-format-extended-plugin)\n' +
+	' * Froala Editor Paragraph Format Extended plugin ' + version + ' (https://github.com/FinesseRus/froala-editor-paragraph-format-extended-plugin)\n' +
 	' * Copyright 2016-2018 Surgie Finesse\n' +
 	' * Licensed under the MIT license\n' +
 	' */\n';
