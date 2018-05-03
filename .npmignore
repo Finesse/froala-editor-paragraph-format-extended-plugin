@@ -1,2 +1,3 @@
+# Only the distributive files are published to NPM
 *
 !/dist/*

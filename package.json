@@ -1,6 +1,6 @@
 {
   "name": "froala-editor-paragraph-format-extended-plugin",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A plugin for Froala Editor 2 that allows to choose paragraph format (tag name, class, etc.) from a list",
   "main": "dist/paragraph_format_extended.js",
   "scripts": {

@@ -21,7 +21,7 @@ and import it using a `<script>` tag after the Froala Editor import.
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.7.3/js/froala_editor.min.js"></script>
 
 <!-- Paragraph Format Extended plugin -->
-<script type="text/javascript" src="//cdn.jsdelivr.net/npm/froala-editor-paragraph-format-extended-plugin@0.1.1/dist/paragraph_format_extended.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/froala-editor-paragraph-format-extended-plugin@0.1.2/dist/paragraph_format_extended.min.js"></script>
 ```
 
 ### AMD/RequireJS
@@ -38,7 +38,7 @@ require.config({
     paths: {
         jquery: '//cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min',
         'froala-editor': '//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.7.3/js/froala_editor.min',
-        'froala-editor-paragraph-format-extended-plugin': '//cdn.jsdelivr.net/npm/froala-editor-paragraph-format-extended-plugin@0.1.1/dist/paragraph_format_extended.min'
+        'froala-editor-paragraph-format-extended-plugin': '//cdn.jsdelivr.net/npm/froala-editor-paragraph-format-extended-plugin@0.1.2/dist/paragraph_format_extended.min'
     }
 });
 
