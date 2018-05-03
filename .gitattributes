@@ -1,5 +1,6 @@
 * text=auto
 
 # Makes all the line breaks in the text files be casted to LF
-*.{js,md,json} text eol=lf
-*.{gitignore,gitattributes} text eol=lf
+*.{js,md,json,yml} text eol=lf
+*.{gitignore,gitattributes,npmignore} text eol=lf
+LICENSE text eol=lf
