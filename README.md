@@ -131,7 +131,7 @@ Should the Paragraph Format Extended button from the toolbar be replaced with a 
 
 The source code is located in the `src` directory. Do the following to modify and compile it:
 
-1. Install [node.js](https://nodejs.org/).
+1. Install [node.js](https://nodejs.org/) version 8 or greater.
 2. Open a console, go to the project root directory and run `npm install`.
 3. Run `npm run build` to compile distribution files from the source files.
 

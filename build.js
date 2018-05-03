@@ -1,17 +1,19 @@
-const fs = require('fs');
+const {writeFile} = require('fs');
+const {promisify} = require('util');
 const babel = require('babel-core');
 const uglifyES = require('uglify-es');
 const {version, author, homepage} = require('./package.json');
 
-const copyrightNotice = `/**
+(async () => {
+	const copyrightNotice = `/**
  * Froala Editor Paragraph Format Extended plugin v${version} (${homepage})
  * Copyright 2016-${new Date().getFullYear()} ${author.name}
  * Licensed under the MIT license
  */
 `;
 
-new Promise((resolve, reject) => {
-	babel.transformFile('./src/paragraph_format_extended.js', {
+	// Building the full code
+	let {code} = await promisify(babel.transformFile)('./src/paragraph_format_extended.js', {
 		presets: [
 			['env', {
 				targets: {
@@ -41,21 +43,12 @@ new Promise((resolve, reject) => {
 				exactGlobals: true
 			}]
 		]
-	}, (error, {code}) => {
-		if (error) return reject(error);
-		resolve(code);
 	});
-})
-	.then(code => new Promise((resolve, reject) => {
-		fs.writeFile('./dist/paragraph_format_extended.js', copyrightNotice + code, error => {
-			if (error) return reject(error);
-			resolve(code);
-		});
-	}))
-	.then(code => uglifyES.minify(code))
-	.then(({code}) => new Promise((resolve, reject) => {
-		fs.writeFile('./dist/paragraph_format_extended.min.js', copyrightNotice + code, error => {
-			if (error) return reject(error);
-			resolve(code);
-		});
-	}));
+	await promisify(writeFile)('./dist/paragraph_format_extended.js', copyrightNotice + code);
+	console.log('`dist/paragraph_format_extended.js` has been built');
+
+	// Building the minified code
+	code = uglifyES.minify(code).code;
+	promisify(writeFile)('./dist/paragraph_format_extended.min.js', copyrightNotice + code);
+	console.log('`dist/paragraph_format_extended.min.js` has been built');
+})();
