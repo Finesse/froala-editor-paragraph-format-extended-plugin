@@ -1,7 +1,7 @@
 const fs = require('fs');
 const babel = require('babel-core');
 const uglifyES = require('uglify-es');
-const {version, author, homepage} = require('../package.json');
+const {version, author, homepage} = require('./package.json');
 
 const copyrightNotice = `/**
  * Froala Editor Paragraph Format Extended plugin v${version} (${homepage})

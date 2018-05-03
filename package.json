@@ -4,7 +4,7 @@
   "description": "A plugin for Froala Editor 2 that allows to choose paragraph format (tag name, class, etc.) from a list",
   "main": "dist/paragraph_format_extended.js",
   "scripts": {
-    "build": "node build/index.js"
+    "build": "node build.js"
   },
   "repository": {
     "type": "git",
