@@ -7,7 +7,10 @@ extended features.
 
 ## Installation
 
-### Plain
+There are several ways to install the plugin:
+
+<details open>
+<summary>Simple</summary>
 
 Download the [plugin script](https://github.com/FinesseRus/froala-editor-paragraph-format-extended-plugin/blob/master/dist/paragraph_format_extended.min.js)
 and import it using a `<script>` tag after the Froala Editor import.
@@ -23,8 +26,10 @@ and import it using a `<script>` tag after the Froala Editor import.
 <!-- Paragraph Format Extended plugin -->
 <script type="text/javascript" src="//cdn.jsdelivr.net/npm/froala-editor-paragraph-format-extended-plugin@0.1.2/dist/paragraph_format_extended.min.js"></script>
 ```
+</details>
 
-### AMD/RequireJS
+<details>
+<summary>AMD/RequireJS</summary>
 
 The script requires the following AMD modules to be available:
 
@@ -48,8 +53,10 @@ define('myModule', ['jquery', 'froala-editor-paragraph-format-extended-plugin'],
 ```
 
 You can find more information about installation of Froala Editor using AMD [there](https://github.com/froala/wysiwyg-editor/issues/690).
+</details>
 
-### Node.js/NPM
+<details>
+<summary>Node.js/NPM/Yarn/Webpack/Rollup/Browserify</summary>
 
 Install the plugin:
 
@@ -63,6 +70,7 @@ Require it:
 const $ = require('jquery');
 require('froala-editor-paragraph-format-extended-plugin');
 ```
+</details>
 
 ## Basic usage
 
