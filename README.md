@@ -16,8 +16,8 @@ There are several ways to install the plugin:
 <details open>
 <summary>Simple</summary>
 
-Download the [plugin script](https://github.com/FinesseRus/froala-editor-paragraph-format-extended-plugin/blob/master/dist/paragraph_format_extended.min.js)
-and import it using a `<script>` tag after the Froala Editor import.
+Download the [plugin script](dist/paragraph_format_extended.min.js) and import it using a `<script>` tag after the 
+Froala Editor import.
 
 ```html
 <!-- Froala Editor required stuff -->
