@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/FinesseRus/froala-editor-paragraph-format-extended-plugin.git"
+    "url": "https://github.com/Finesse/froala-editor-paragraph-format-extended-plugin.git"
   },
   "keywords": [
     "Froala Editor",
@@ -24,9 +24,9 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/FinesseRus/froala-editor-paragraph-format-extended-plugin/issues"
+    "url": "https://github.com/Finesse/froala-editor-paragraph-format-extended-plugin/issues"
   },
-  "homepage": "https://github.com/FinesseRus/froala-editor-paragraph-format-extended-plugin",
+  "homepage": "https://github.com/Finesse/froala-editor-paragraph-format-extended-plugin",
   "peerDependencies": {
     "jquery": "*",
     "froala-editor": "^2.0.0"

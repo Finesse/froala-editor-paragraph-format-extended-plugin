@@ -2,7 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/froala-editor-paragraph-format-extended-plugin.svg)](https://www.npmjs.com/package/froala-editor-paragraph-format-extended-plugin)
 ![Supported Froala Editor versions](https://img.shields.io/badge/Froala_Editor-v2-brightgreen.svg)
-[![Build Status](https://travis-ci.org/FinesseRus/froala-editor-paragraph-format-extended-plugin.svg?branch=master)](https://travis-ci.org/FinesseRus/froala-editor-paragraph-format-extended-plugin)
+[![Build Status](https://travis-ci.org/Finesse/froala-editor-paragraph-format-extended-plugin.svg?branch=master)](https://travis-ci.org/Finesse/froala-editor-paragraph-format-extended-plugin)
 [![Gzip size](http://img.badgesize.io/http://cdn.jsdelivr.net/npm/froala-editor-paragraph-format-extended-plugin/dist/paragraph_format_extended.min.js?compression=gzip)](http://cdn.jsdelivr.net/npm/froala-editor-paragraph-format-extended-plugin/dist/paragraph_format_extended.min.js)
 
 A plugin for Froala WYSIWYG Editor v2 that allows to choose paragraph format (tag name, 
