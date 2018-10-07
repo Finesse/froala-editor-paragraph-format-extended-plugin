@@ -32,9 +32,9 @@ const babelEnvPresetConfig = {
 };
 const babelPlugins = [];
 
-async function buildCJS() {
+async function buildForNode() {
   // Building the full CommonJS code
-  let {code} = await babel.transformFileAsync('./src/paragraph_format_extended.js', {
+  const {code} = await babel.transformFileAsync('./src/paragraph_format_extended.js', {
     presets: [
       ['@babel/preset-env', {
         ...babelEnvPresetConfig,
@@ -50,9 +50,9 @@ async function buildCJS() {
   console.log('`dist/paragraph_format_extended.cjs.js` has been built');
 }
 
-async function buildUMD() {
+async function buildForBrowser() {
   // Building the full UMD code
-  code = (await promisify(babel.transformFile)('./src/paragraph_format_extended.js', {
+  let {code} = await babel.transformFileAsync('./src/paragraph_format_extended.js', {
     presets: [
       ['@babel/preset-env', babelEnvPresetConfig]
     ],
@@ -66,15 +66,15 @@ async function buildUMD() {
         exactGlobals: true
       }]
     ]
-  })).code;
+  });
   await writeFileAsync('./dist/paragraph_format_extended.umd.js', copyrightNotice + code);
   console.log('`dist/paragraph_format_extended.umd.js` has been built');
 
   // Building the minified UMD code
   code = terser.minify(code).code;
-  writeFileAsync('./dist/paragraph_format_extended.umd.min.js', copyrightNotice + code);
+  await writeFileAsync('./dist/paragraph_format_extended.umd.min.js', copyrightNotice + code);
   console.log('`dist/paragraph_format_extended.umd.min.js` has been built');
 }
 
-buildCJS();
-buildUMD();
+buildForNode();
+buildForBrowser();
