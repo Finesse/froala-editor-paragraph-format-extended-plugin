@@ -3,7 +3,7 @@
 [![npm](https://img.shields.io/npm/v/froala-editor-paragraph-format-extended-plugin.svg)](https://www.npmjs.com/package/froala-editor-paragraph-format-extended-plugin)
 ![Supported Froala Editor versions](https://img.shields.io/badge/Froala_Editor-v2-brightgreen.svg)
 [![Build Status](https://travis-ci.org/Finesse/froala-editor-paragraph-format-extended-plugin.svg?branch=master)](https://travis-ci.org/Finesse/froala-editor-paragraph-format-extended-plugin)
-[![Gzip size](http://img.badgesize.io/http://cdn.jsdelivr.net/npm/froala-editor-paragraph-format-extended-plugin/dist/paragraph_format_extended.min.js?compression=gzip)](http://cdn.jsdelivr.net/npm/froala-editor-paragraph-format-extended-plugin/dist/paragraph_format_extended.min.js)
+[![Gzip size](http://img.badgesize.io/http://cdn.jsdelivr.net/npm/froala-editor-paragraph-format-extended-plugin/dist/paragraph_format_extended.umd.min.js?compression=gzip)](http://cdn.jsdelivr.net/npm/froala-editor-paragraph-format-extended-plugin/dist/paragraph_format_extended.umd.min.js)
 
 A plugin for Froala WYSIWYG Editor v2 that allows to choose paragraph format (tag name, 
 class, etc.) from a list. It is like a mixture of the `paragraphFormat` and the `paragraphStyle` plugins with some 
@@ -17,7 +17,7 @@ There are several ways to install the plugin:
 <details open>
 <summary>Simple</summary>
 
-Download the [plugin script](dist/paragraph_format_extended.min.js) and import it using a `<script>` tag after the 
+Download the [plugin script](dist/paragraph_format_extended.umd.min.js) and import it using a `<script>` tag after the 
 Froala Editor import.
 
 ```html
@@ -29,7 +29,7 @@ Froala Editor import.
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.7.3/js/froala_editor.min.js"></script>
 
 <!-- Paragraph Format Extended plugin -->
-<script type="text/javascript" src="//cdn.jsdelivr.net/npm/froala-editor-paragraph-format-extended-plugin@0.1.2/dist/paragraph_format_extended.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/froala-editor-paragraph-format-extended-plugin@0.1.2/dist/paragraph_format_extended.umd.min.js"></script>
 ```
 </details>
 
