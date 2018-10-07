@@ -45,15 +45,15 @@ Installation:
 
 ```js
 require.config({
-    paths: {
-        jquery: '//cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min',
-        'froala-editor': '//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.7.3/js/froala_editor.min',
-        'froala-editor-paragraph-format-extended-plugin': '//cdn.jsdelivr.net/npm/froala-editor-paragraph-format-extended-plugin@0.1.2/dist/paragraph_format_extended.min'
-    }
+  paths: {
+    jquery: '//cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min',
+    'froala-editor': '//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.7.3/js/froala_editor.min',
+    'froala-editor-paragraph-format-extended-plugin': '//cdn.jsdelivr.net/npm/froala-editor-paragraph-format-extended-plugin@0.1.2/dist/paragraph_format_extended.umd.min'
+  }
 });
 
 define('myModule', ['jquery', 'froala-editor-paragraph-format-extended-plugin'], function ($) {
-    // ...
+  // ...
 });
 ```
 
@@ -86,14 +86,14 @@ Create an editor, add a `paragraphFormatExtended` button to the toolbar and set 
 ```
 ```js
 $('#editor').froalaEditor({
-    toolbarButtons: $.FroalaEditor.DEFAULTS.toolbarButtons.concat(['paragraphFormatExtended']),
-    paragraphFormatExtended: [
-        {title: 'Normal'},
-        {tag: 'h1', title: 'Heading 1'},
-        {tag: 'h2', title: 'Heading 2'},
-        {tag: 'h2', 'class': 'fr-text-bordered', title: 'Header 2 bordered'},
-        {tag: 'pre', id: 'code', title: 'Code'}
-    ]
+  toolbarButtons: $.FroalaEditor.DEFAULTS.toolbarButtons.concat(['paragraphFormatExtended']),
+  paragraphFormatExtended: [
+    {title: 'Normal'},
+    {tag: 'h1', title: 'Heading 1'},
+    {tag: 'h2', title: 'Heading 2'},
+    {tag: 'h2', 'class': 'fr-text-bordered', title: 'Header 2 bordered'},
+    {tag: 'pre', id: 'code', title: 'Code'}
+  ]    
 });
 ```
 
@@ -114,13 +114,13 @@ paragraphs are purged and replaced with the chosen format values even if they ar
 
 ```js
 [
-    {title: 'Normal'},
-    {tag: 'h1', title: 'Heading 1'},
-    {tag: 'h2', title: 'Heading 2'},
-    {tag: 'h3', title: 'Heading 3'},
-    {tag: 'h4', title: 'Heading 4'},
-    {tag: 'h4', 'class': 'fr-text-bordered', title: 'Header 4 bordered'},
-    {tag: 'pre', title: 'Code'}
+  {title: 'Normal'},
+  {tag: 'h1', title: 'Heading 1'},
+  {tag: 'h2', title: 'Heading 2'},
+  {tag: 'h3', title: 'Heading 3'},
+  {tag: 'h4', title: 'Heading 4'},
+  {tag: 'h4', 'class': 'fr-text-bordered', title: 'Header 4 bordered'},
+  {tag: 'pre', title: 'Code'}
 ]
 ```
 
