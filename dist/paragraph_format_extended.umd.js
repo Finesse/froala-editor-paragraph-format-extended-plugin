@@ -1,6 +1,6 @@
 /**
  * Froala Editor Paragraph Format Extended plugin v0.1.3 (https://github.com/Finesse/froala-editor-paragraph-format-extended-plugin)
- * Copyright 2016-2018 Surgie Finesse
+ * Copyright 2016-2019 Surgie Finesse
  * Licensed under the MIT license
  */
 (function (global, factory) {
