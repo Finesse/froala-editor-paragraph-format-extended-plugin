@@ -2,14 +2,14 @@ const {writeFile} = require('fs');
 const {promisify} = require('util');
 const babel = require('@babel/core');
 const terser = require('terser');
-const {version, author, homepage} = require('./package.json');
+const {version, author, homepage, license} = require('./package.json');
 
 const writeFileAsync = promisify(writeFile);
 
 const copyrightNotice = `/**
  * Froala Editor Paragraph Format Extended plugin v${version} (${homepage})
  * Copyright 2016-${new Date().getFullYear()} ${author.name}
- * Licensed under the MIT license
+ * Licensed under the ${license} license
  */
 `;
 
@@ -22,7 +22,7 @@ const babelEnvPresetConfig = {
       'last 2 Firefox major versions',
       'last 2 Safari major versions',
       'last 2 Opera major versions',
-      'IE >= 10',
+      'IE >= 11',
       'last 2 iOS major versions',
       'last 2 ChromeAndroid major versions',
       'last 2 FirefoxAndroid major versions',
