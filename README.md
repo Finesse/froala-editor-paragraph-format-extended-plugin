@@ -4,7 +4,7 @@
 ![Supported Froala Editor versions](https://img.shields.io/badge/Froala_Editor-v2-brightgreen.svg)
 [![Gzip size](https://badgen.net/bundlephobia/minzip/froala-editor-paragraph-format-extended-plugin?color=green)](https://bundlephobia.com/result?p=froala-editor-paragraph-format-extended-plugin)
 
-A plugin for Froala WYSIWYG Editor v2 that allows to choose paragraph format (tag name, 
+A plugin for Froala WYSIWYG Editor v3 that allows to choose paragraph format (tag name, 
 class, etc.) from a list. It is like a mixture of the `paragraphFormat` and the `paragraphStyle` plugins with some 
 extended features.
 
@@ -29,14 +29,12 @@ Froala Editor import.
 
 ```html
 <!-- Froala Editor required stuff -->
-<link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-<link href="//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.7.3/css/froala_editor.css" rel="stylesheet" type="text/css" />
-<link href="//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.7.3/css/froala_style.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.7.3/js/froala_editor.min.js"></script>
+<link href="//cdn.jsdelivr.net/npm/froala-editor@3.0/css/froala_editor.css" rel="stylesheet" type="text/css" />
+<link href="//cdn.jsdelivr.net/npm/froala-editor@3.0/css/froala_style.css" rel="stylesheet" type="text/css" />
+<script src="//cdn.jsdelivr.net/npm/froala-editor@3.0/js/froala_editor.min.js"></script>
 
 <!-- Paragraph Format Extended plugin -->
-<script type="text/javascript" src="//cdn.jsdelivr.net/npm/froala-editor-paragraph-format-extended-plugin@0.1.3/dist/paragraph_format_extended.umd.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/froala-editor-paragraph-format-extended-plugin@0.2/dist/paragraph_format_extended.umd.min.js"></script>
 ```
 </details>
 
@@ -45,7 +43,6 @@ Froala Editor import.
 
 The script requires the following AMD modules to be available:
 
-* `jquery` — jQuery.
 * `froala-editor` — the Froala Editor main script.
 
 Installation:
@@ -53,18 +50,17 @@ Installation:
 ```js
 require.config({
   paths: {
-    jquery: '//cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min',
-    'froala-editor': '//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.7.3/js/froala_editor.min',
-    'froala-editor-paragraph-format-extended-plugin': '//cdn.jsdelivr.net/npm/froala-editor-paragraph-format-extended-plugin@0.1.3/dist/paragraph_format_extended.umd.min'
+    'froala-editor': '//cdn.jsdelivr.net/npm/froala-editor@3.0/js/froala_editor.min',
+    'froala-editor-paragraph-format-extended-plugin': '//cdn.jsdelivr.net/npm/froala-editor-paragraph-format-extended-plugin@0.2/dist/paragraph_format_extended.umd.min'
   }
 });
 
-define('myModule', ['jquery', 'froala-editor-paragraph-format-extended-plugin'], function ($) {
+define('myModule', ['froala-editor', 'froala-editor-paragraph-format-extended-plugin'], function (FroalaEditor) {
   // ...
 });
 ```
 
-You can find more information about installation of Froala Editor using AMD [there](https://github.com/froala/wysiwyg-editor/issues/690).
+You can find more information about installation of Froala Editor using AMD in [the editor readme](http://github.com/froala/wysiwyg-editor#load-from-cdn-as-an-amd-module).
 </details>
 
 <details>
@@ -79,7 +75,7 @@ npm install froala-editor-paragraph-format-extended-plugin --save
 Require it:
 
 ```js
-const $ = require('jquery');
+const FroalaEditor = require('froala-editor');
 require('froala-editor-paragraph-format-extended-plugin');
 ```
 </details>
@@ -89,11 +85,11 @@ require('froala-editor-paragraph-format-extended-plugin');
 Create an editor, add a `paragraphFormatExtended` button to the toolbar and set up the formats list:
 
 ```html
-<textarea id="editor"></textarea>
+<div id="editor"></div>
 ```
 ```js
-$('#editor').froalaEditor({
-  toolbarButtons: $.FroalaEditor.DEFAULTS.toolbarButtons.concat(['paragraphFormatExtended']),
+new FroalaEditor({
+  toolbarButtons: [/* Other your buttons... */ 'paragraphFormatExtended'],
   paragraphFormatExtended: [
     {title: 'Normal'},
     {tag: 'h1', title: 'Heading 1'},
@@ -134,7 +130,7 @@ paragraphs are purged and replaced with the chosen format values even if they ar
 A list with the formats that will appear in the Paragraph Format Extended dropdown from the toolbar. Array items are 
 objects with the following attributes:
 
-* `title` (String, required) — Format title that is shown in the dropdown. It is [translated by Froala Editor](https://www.froala.com/wysiwyg-editor/docs/methods#language.translate) before displaying.
+* `title` (String, required) — Format title that is shown in the dropdown. It is [translated by Froala Editor](http://froala.com/wysiwyg-editor/docs/methods#language.translate) before displaying.
 * `tag` (String|Null) — Paragraph tag name. If `null` or nothing is provided the default editor tag is used.
 * `class` (String|Null) — Paragraph CSS class name. May contain multiple classes devided by space.
 * `id` (String|Null) — The value of paragraph `id` HTML attribute.

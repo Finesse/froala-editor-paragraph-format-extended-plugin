@@ -1,7 +1,4 @@
-import $ from 'jquery';
-import 'froala-editor';
-
-const FroalaEditor = $.FroalaEditor;
+import FroalaEditor from 'froala-editor';
 
 /**
  * @typedef {String} FormatID
@@ -54,6 +51,11 @@ FroalaEditor.DEFAULTS = {
  */
 FroalaEditor.PLUGINS.paragraphFormatExtended = editor => {
   /**
+   * It's a jQuery instance. The official plugins do the same.
+   */
+  const $ = editor.$;
+
+  /**
    * Applies format to the currently selected paragraphs.
    *
    * @param {FormatID} id Format data
@@ -64,14 +66,14 @@ FroalaEditor.PLUGINS.paragraphFormatExtended = editor => {
     const doesNeedBlock = format['class'] || format.id;
 
     editor.selection.save();
-    editor.html.wrap(true, true, true, true);
+    editor.html.wrap(true, true, true, true, true);
     editor.selection.restore();
 
     const $blocks = $(editor.selection.blocks());
 
-    // `editor.selection.blocks` returns nested blocks. We need to process only deepest childs to prevent
+    // `editor.selection.blocks` returns nested blocks. We need to process only deepest children to prevent
     // multiple style applying for nested blocks. This array keeps the list of original and processed blocks. So
-    // if processing block contains any block from this list, it is skipped.
+    // if a being processed block contains any block from this list, it is skipped.
     let $blocksToCheck = $blocks;
 
     editor.selection.save();
@@ -299,7 +301,10 @@ FroalaEditor.PLUGINS.paragraphFormatExtended = editor => {
  *
  * @see https://www.froala.com/wysiwyg-editor/docs/concepts/custom-button More info
  */
-FroalaEditor.DefineIcon('paragraphFormatExtended', {NAME: 'paragraph'});
+FroalaEditor.DefineIcon('paragraphFormatExtended', {
+  NAME : 'paragraph',
+  SVG_KEY : 'paragraphFormat'
+});
 
 /**
  * Defining a plugin button.
@@ -336,7 +341,9 @@ FroalaEditor.RegisterCommand('paragraphFormatExtended', {
    * Text displayed on button until selection format is determined (any text is selected in editor). Is used if
    * `displaySelection` returns `true`.
    */
-  defaultSelection: 'Format',
+  defaultSelection(editor) {
+    return editor.language.translate(editor.opts.paragraphDefaultSelection);
+  },
 
   /**
    * Button width in pixels. Is used if `displaySelection` returns `true`.

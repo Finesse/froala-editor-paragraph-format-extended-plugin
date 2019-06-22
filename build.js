@@ -12,24 +12,6 @@ const copyrightNotice = `/**
  * Licensed under the ${license} license
  */
 `;
-
-const babelEnvPresetConfig = {
-  targets: {
-    // According to https://github.com/froala/wysiwyg-editor#browser-support
-    browsers: [
-      'last 2 Chrome major versions',
-      'last 2 Edge major versions',
-      'last 2 Firefox major versions',
-      'last 2 Safari major versions',
-      'last 2 Opera major versions',
-      'IE >= 11',
-      'last 2 iOS major versions',
-      'last 2 ChromeAndroid major versions',
-      'last 2 FirefoxAndroid major versions',
-      'last 2 Android major versions'
-    ]
-  }
-};
 const babelPlugins = [];
 
 async function buildForNode() {
@@ -37,7 +19,6 @@ async function buildForNode() {
   const {code} = await babel.transformFileAsync('./src/paragraph_format_extended.js', {
     presets: [
       ['@babel/preset-env', {
-        ...babelEnvPresetConfig,
         modules: 'cjs'
       }]
     ],
@@ -54,14 +35,13 @@ async function buildForBrowser() {
   // Building the full UMD code
   let {code} = await babel.transformFileAsync('./src/paragraph_format_extended.js', {
     presets: [
-      ['@babel/preset-env', babelEnvPresetConfig]
+      ['@babel/preset-env']
     ],
     plugins: [
       ...babelPlugins,
       ['@babel/plugin-transform-modules-umd', {
         globals: {
-          jquery: 'jQuery',
-          'froala-editor': 'jQuery.fn.froalaEditor'
+          'froala-editor': 'FroalaEditor'
         },
         exactGlobals: true
       }]

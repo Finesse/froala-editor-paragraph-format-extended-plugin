@@ -5,20 +5,20 @@
  */
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(["jquery", "froala-editor"], factory);
+    define(["froala-editor"], factory);
   } else if (typeof exports !== "undefined") {
-    factory(require("jquery"), require("froala-editor"));
+    factory(require("froala-editor"));
   } else {
     var mod = {
       exports: {}
     };
-    factory(global.jQuery, global.jQuery.fn.froalaEditor);
+    factory(global.FroalaEditor);
     global.paragraph_format_extended = mod.exports;
   }
-})(this, function (_jquery, _froalaEditor) {
+})(this, function (_froalaEditor) {
   "use strict";
 
-  _jquery = _interopRequireDefault(_jquery);
+  _froalaEditor = _interopRequireDefault(_froalaEditor);
 
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -26,7 +26,6 @@
 
   function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-  var FroalaEditor = _jquery.default.FroalaEditor;
   /**
    * @typedef {String} FormatID
    *
@@ -56,8 +55,7 @@
    *
    * @see https://www.froala.com/wysiwyg-editor/docs/concepts/create-plugin More info
    */
-
-  FroalaEditor.DEFAULTS = _objectSpread({}, FroalaEditor.DEFAULTS, {
+  _froalaEditor.default.DEFAULTS = _objectSpread({}, _froalaEditor.default.DEFAULTS, {
     paragraphFormatExtended: [{
       title: 'Normal'
     }, {
@@ -89,22 +87,27 @@
    * @see https://www.froala.com/wysiwyg-editor/docs/concepts/create-plugin More info
    */
 
-  FroalaEditor.PLUGINS.paragraphFormatExtended = function (editor) {
+  _froalaEditor.default.PLUGINS.paragraphFormatExtended = function (editor) {
+    /**
+     * It's a jQuery instance. The official plugins do the same.
+     */
+    var $ = editor.$;
     /**
      * Applies format to the currently selected paragraphs.
      *
      * @param {FormatID} id Format data
      */
+
     function apply(id) {
       var format = getIdFormat(id);
       var tag = format.tag || editor.html.defaultTag();
       var doesNeedBlock = format['class'] || format.id;
       editor.selection.save();
-      editor.html.wrap(true, true, true, true);
+      editor.html.wrap(true, true, true, true, true);
       editor.selection.restore();
-      var $blocks = (0, _jquery.default)(editor.selection.blocks()); // `editor.selection.blocks` returns nested blocks. We need to process only deepest childs to prevent
+      var $blocks = $(editor.selection.blocks()); // `editor.selection.blocks` returns nested blocks. We need to process only deepest children to prevent
       // multiple style applying for nested blocks. This array keeps the list of original and processed blocks. So
-      // if processing block contains any block from this list, it is skipped.
+      // if a being processed block contains any block from this list, it is skipped.
 
       var $blocksToCheck = $blocks;
       editor.selection.save();
@@ -114,7 +117,7 @@
           return;
         }
 
-        var $block = (0, _jquery.default)(block);
+        var $block = $(block);
 
         if ($block.find($blocksToCheck).length) {
           return;
@@ -143,7 +146,7 @@
         }
       });
       editor.$el.find('pre:not([skip="true"]) + pre:not([skip="true"])').each(function (_, element) {
-        var $element = (0, _jquery.default)(element);
+        var $element = $(element);
         $element.prev().append("<br>".concat($element.html()));
         $element.remove();
       });
@@ -247,7 +250,7 @@
       var $blockNew;
 
       if ($block.find('ul, ol').length > 0) {
-        $blockNew = (0, _jquery.default)("<".concat(tag, ">"));
+        $blockNew = $("<".concat(tag, ">"));
         $block.prepend($blockNew);
 
         for (var child = editor.node.contents($block[0])[0]; child && ['ul', 'ol'].indexOf(child.tagName.toLowerCase()) === -1;) {
@@ -256,7 +259,7 @@
           child = next;
         }
       } else {
-        $blockNew = (0, _jquery.default)("<".concat(tag, ">")).html($block.html());
+        $blockNew = $("<".concat(tag, ">")).html($block.html());
         $block.html($blockNew);
       }
 
@@ -318,7 +321,7 @@
         tag = "div class=\"fr-temp-div\"".concat(editor.node.isEmpty($block[0], true) ? ' data-empty="true"' : '');
       }
 
-      var $blockNew = (0, _jquery.default)("<".concat(tag, " ").concat(editor.node.attributes($block[0]), ">")).html($block.html());
+      var $blockNew = $("<".concat(tag, " ").concat(editor.node.attributes($block[0]), ">")).html($block.html());
       $block.replaceWith($blockNew);
       return $blockNew;
     }
@@ -336,8 +339,9 @@
    */
 
 
-  FroalaEditor.DefineIcon('paragraphFormatExtended', {
-    NAME: 'paragraph'
+  _froalaEditor.default.DefineIcon('paragraphFormatExtended', {
+    NAME: 'paragraph',
+    SVG_KEY: 'paragraphFormat'
   });
   /**
    * Defining a plugin button.
@@ -345,7 +349,8 @@
    * @see https://www.froala.com/wysiwyg-editor/docs/concepts/custom-button More info
    */
 
-  FroalaEditor.RegisterCommand('paragraphFormatExtended', {
+
+  _froalaEditor.default.RegisterCommand('paragraphFormatExtended', {
     /**
      * Action type.
      */
@@ -375,7 +380,9 @@
      * Text displayed on button until selection format is determined (any text is selected in editor). Is used if
      * `displaySelection` returns `true`.
      */
-    defaultSelection: 'Format',
+    defaultSelection: function defaultSelection(editor) {
+      return editor.language.translate(editor.opts.paragraphDefaultSelection);
+    },
 
     /**
      * Button width in pixels. Is used if `displaySelection` returns `true`.
@@ -444,6 +451,7 @@
    * @param {Format} format
    * @returns {FormatID}
    */
+
 
   function getFormatId(format) {
     var str = '';
