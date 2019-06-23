@@ -1,7 +1,4 @@
-import $ from 'jquery';
-import 'froala-editor';
-
-const FroalaEditor = $.FroalaEditor;
+import FroalaEditor from 'froala-editor';
 
 /**
  * @typedef {String} FormatID
@@ -54,6 +51,11 @@ FroalaEditor.DEFAULTS = {
  */
 FroalaEditor.PLUGINS.paragraphFormatExtended = editor => {
   /**
+   * It's a jQuery instance. The official plugins do the same.
+   */
+  const $ = editor.$;
+
+  /**
    * Applies format to the currently selected paragraphs.
    *
    * @param {FormatID} id Format data
@@ -61,53 +63,57 @@ FroalaEditor.PLUGINS.paragraphFormatExtended = editor => {
   function apply(id) {
     const format = getIdFormat(id);
     const tag = format.tag || editor.html.defaultTag();
-    const doesNeedBlock = format['class'] || format.id;
+    const doesNeedBlock = format.class || format.id;
 
     editor.selection.save();
-    editor.html.wrap(true, true, true, true);
+    editor.html.wrap(true, true, true, true, true);
     editor.selection.restore();
 
-    const $blocks = $(editor.selection.blocks());
+    const blocks = editor.selection.blocks();
 
-    // `editor.selection.blocks` returns nested blocks. We need to process only deepest childs to prevent
+    // `editor.selection.blocks` returns nested blocks. We need to process only deepest children to prevent
     // multiple style applying for nested blocks. This array keeps the list of original and processed blocks. So
-    // if processing block contains any block from this list, it is skipped.
-    let $blocksToCheck = $blocks;
+    // if a being processed block contains any block from this list, it is skipped.
+    const blocksToCheck = Array.prototype.slice.call(blocks);
 
     editor.selection.save();
     editor.$el.find('pre').attr('skip', true);
 
-    $blocks.each((_, block) => {
+    blocks.forEach(block => {
       if (editor.node.isList(block)) {
         return;
       }
 
-      const $block = $(block);
-
-      if ($block.find($blocksToCheck).length) {
+      if (blocksToCheck.some(blockToCheck => blockToCheck !== block && block.contains(blockToCheck))) {
         return;
       }
 
       let substitute;
 
-      if ($block.is('li')) {
+      if (block.tagName === 'LI') {
         substitute = substituteLi;
-      } else if ($block.parent().is('li')) {
+      } else if (block.parentNode.tagName === 'LI') {
         substitute = substituteLiChild;
-      } else if ($block.parent().is('td, th')) {
+      } else if (['TD', 'TH'].indexOf(block.parentNode.tagName) !== -1) {
         substitute = substituteTableCellChild;
       } else {
         substitute = substituteOther;
       }
 
-      const $blockNew = substitute($block, tag, doesNeedBlock);
+      const $blockNew = substitute($(block), tag, doesNeedBlock);
 
       if ($blockNew) {
-        $blockNew.attr({
-          'class': format['class'] || null,
-          id:      format.id || null
+        $blockNew.each((_, blockNew) => {
+          // A null value of the attr method argument doesn't remove the attribute in the embedded version of jQuery
+          for (const attribute of ['id', 'class']) {
+            if (format[attribute]) {
+              blockNew.setAttribute(attribute, format[attribute]);
+            } else {
+              blockNew.removeAttribute(attribute);
+            }
+          }
+          blocksToCheck.push(blockNew);
         });
-        $blocksToCheck = $blocksToCheck.add($blockNew);
       }
     });
 
@@ -131,10 +137,10 @@ FroalaEditor.PLUGINS.paragraphFormatExtended = editor => {
   function refreshDropdown($dropdown) {
     const blocks = editor.selection.blocks();
     const query = getElementFormatIds(blocks[0])
-			.map(FormatId => `.fr-command[data-param1="${FormatId}"]`)
-			.join(', ');
+      .map(formatId => `.fr-command[data-param1="${formatId}"]`)
+      .join(', ');
 
-    $dropdown.find(query).addClass('fr-active');
+    $dropdown.find(query).addClass('fr-active').attr("aria-selected", true);
   }
 
   /**
@@ -148,12 +154,12 @@ FroalaEditor.PLUGINS.paragraphFormatExtended = editor => {
     }
 
     const blocks = editor.selection.blocks();
-    const FormatIds = getElementFormatIds(blocks[0]);
+    const formatIds = getElementFormatIds(blocks[0]);
     const formats = editor.opts.paragraphFormatExtended;
     let title = "\u2014";	// M-dash
 
     for (let i = 0; i < formats.length; ++i) {
-      if (FormatIds.indexOf(getFormatId(formats[i])) !== -1) {
+      if (formatIds.indexOf(getFormatId(formats[i])) !== -1) {
         title = editor.language.translate(formats[i].title);
         break;
       }
@@ -174,9 +180,9 @@ FroalaEditor.PLUGINS.paragraphFormatExtended = editor => {
 
     if (element instanceof HTMLElement) {
       format = {
-        tag:     element.tagName.toLowerCase(),
-        id:      element.getAttribute('id'),
-        'class': element.getAttribute('class')
+        tag:   element.tagName.toLowerCase(),
+        id:    element.getAttribute('id'),
+        class: element.getAttribute('class')
       };
 
       if (['li', 'td', 'th'].indexOf(format.tag) !== -1) {
@@ -282,7 +288,7 @@ FroalaEditor.PLUGINS.paragraphFormatExtended = editor => {
       tag = `div class="fr-temp-div"${editor.node.isEmpty($block[0], true) ? ' data-empty="true"' : ''}`;
     }
 
-    const $blockNew = $(`<${tag} ${editor.node.attributes($block[0])}>`).html($block.html());
+    const $blockNew = $(`<${tag} ${editor.node.attributes($block[0])}>`).html($block.html()).removeAttr('data-empty');
     $block.replaceWith($blockNew);
     return $blockNew;
   }
@@ -299,7 +305,10 @@ FroalaEditor.PLUGINS.paragraphFormatExtended = editor => {
  *
  * @see https://www.froala.com/wysiwyg-editor/docs/concepts/custom-button More info
  */
-FroalaEditor.DefineIcon('paragraphFormatExtended', {NAME: 'paragraph'});
+FroalaEditor.DefineIcon('paragraphFormatExtended', {
+  NAME : 'paragraph',
+  SVG_KEY : 'paragraphFormat'
+});
 
 /**
  * Defining a plugin button.
@@ -330,13 +339,15 @@ FroalaEditor.RegisterCommand('paragraphFormatExtended', {
    */
   displaySelection(editor) {
     return editor.opts.paragraphFormatExtendedSelection;
-	},
+  },
 
   /**
    * Text displayed on button until selection format is determined (any text is selected in editor). Is used if
    * `displaySelection` returns `true`.
    */
-  defaultSelection: 'Format',
+  defaultSelection(editor) {
+    return editor.language.translate(editor.opts.paragraphDefaultSelection);
+  },
 
   /**
    * Button width in pixels. Is used if `displaySelection` returns `true`.
@@ -351,23 +362,25 @@ FroalaEditor.RegisterCommand('paragraphFormatExtended', {
    * @returns {String} HTML content
    */
   html() {
-  	const itemsHTML = this.opts.paragraphFormatExtended
-			.map(format => {
-				const title = this.language.translate(format.title);
-				const tag = format.tag || this.html.defaultTag();
-				const formatId = getFormatId(format);
+    const itemsHTML = this.opts.paragraphFormatExtended
+      .map(format => {
+        const title = this.language.translate(format.title);
+        const tag = format.tag || this.html.defaultTag();
+        const formatId = getFormatId(format);
+        // const shortcut = this.shortcuts.get(`paragraphFormatExtended.${formatId}`);
 
-				return `<li>` +
-					`<${tag}${format['class'] ? ` class="${format['class']}"` : ''} style="padding: 0 !important; margin: 0 !important;">` +
-					`<a class="fr-command" data-cmd="paragraphFormatExtended" data-param1="${formatId}" title="${title}">` +
-					title +
-					`</a>` +
-					`</${tag}>` +
-					`</li>`;
-			})
-			.join("\n");
+        return `<li role="presentation">` +
+          `<${tag}${format.class ? ` class="${format.class}"` : ''}${format.id ? ` id="${format.id}"` : ''} style="padding: 0 !important; margin: 0 !important;" role="presentation">` +
+          `<a class="fr-command" tabIndex="-1" role="option" data-cmd="paragraphFormatExtended" data-param1="${formatId}" title="${title}">` +
+          title +
+          // (shortcut ? `<span class="fr-shortcut">{shortcut}</span>` : '') +
+          `</a>` +
+          `</${tag}>` +
+          `</li>`;
+      })
+      .join("\n");
 
-    return `<ul class="fr-dropdown-list">${itemsHTML}</ul>`;
+    return `<ul class="fr-dropdown-list" role="presentation">${itemsHTML}</ul>`;
   },
 
   /**
@@ -423,8 +436,8 @@ function getFormatId(format) {
     str += `#${format.id}`;
   }
 
-  if (format['class']) {
-    str += (format['class'] instanceof Array ? format['class'] : String(format['class']).split(/\s+/))
+  if (format.class) {
+    str += (format.class instanceof Array ? format.class : String(format.class).split(/\s+/))
       .filter(part => part)
       .sort()
       .map(part => `.${part}`)
@@ -441,13 +454,13 @@ function getFormatId(format) {
  * @returns {Format}
  */
 function getIdFormat(id) {
-  const parts = /([^\.#]*)(#[^\.]+|.{0})(\.[\s\S]+|.{0})/.exec(id);
+  const parts = /([^.#]*)(#[^.]+|.{0})(\.[\s\S]+|.{0})/.exec(id);
 
   if (parts) {
     return {
-      tag:     parts[1].toLowerCase() || null,
-      id:      parts[2].slice(1) || null,
-      'class': parts[3].split('.').filter(part => part).join(' ') || null
+      tag:   parts[1].toLowerCase() || null,
+      id:    parts[2].slice(1) || null,
+      class: parts[3].split('.').filter(part => part).join(' ') || null
     };
   } else {
     return {};

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+    <link href="https://cdn.jsdelivr.net/npm/froala-editor@3.0/css/froala_editor.css" rel="stylesheet" type="text/css"/>
+    <link href="https://cdn.jsdelivr.net/npm/froala-editor@3.0/css/froala_style.css" rel="stylesheet" type="text/css"/>
+    <script src="https://cdn.jsdelivr.net/npm/froala-editor@3.0/js/froala_editor.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/froala-editor@3.0/js/plugins/align.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/froala-editor@3.0/js/plugins/lists.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/froala-editor@3.0/js/plugins/quote.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/froala-editor@3.0/js/plugins/table.min.js"></script>
+    <script src="./dist/paragraph_format_extended.umd.js"></script>
+  </head>
+  <body>
+    <p>Build the script and open this file in a browser to test the script</p>
+
+    <div id="example">
+      <h1>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</h1>
+      <p>Adipisci atque, aut beatae, cumque deleniti eaque et iusto laboriosam nam neque ullam, voluptatem! Aspernatur consequatur dolore itaque minus, neque officia quas.</p>
+      <p>Consequuntur ducimus facilis fugiat harum laborum magnam nihil quam quas reiciendis tempora ut, veniam.</p>
+      <ul>
+        <li>Aliquid illo laboriosam officiis quam quia reiciendis voluptatem voluptatum.</li>
+        <li>Adipisci alias aspernatur corporis distinctio dolores doloribus ea enim est eveniet hic incidunt inventore ipsa itaque iusto libero maiores natus, necessitatibus officia, omnis provident quam quas quibusdam quidem rerum tenetur ut veritatis.</li>
+        <li>Corporis cupiditate error ex laudantium molestias repellendus rerum sunt? Adipisci dolorum esse maxime voluptas voluptate.</li>
+      </ul>
+      <table>
+        <thead>
+          <tr>
+            <th>Accusantium aliquam</th>
+            <th>Blanditiis commodi consequuntur deleniti</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Deserunt dicta dolor dolore et eveniet exercitationem in iste laboriosam libero maxime, minima odio optio perspiciatis placeat possimus quas, reiciendis repellat reprehenderit rerum sapiente sit velit veritatis?</td>
+            <td>Delectus deleniti doloribus impedit iure laudantium molestiae quod repellendus vel voluptates.</td>
+          </tr>
+          <tr>
+            <td>Alias atque consequatur, cum dignissimos dolorem eligendi esse iusto molestiae nulla, perspiciatis sit, soluta.</td>
+            <td>Blanditiis distinctio dolor dolore dolorem eos eveniet exercitationem, facere inventore ipsa ipsum maiores modi molestias nesciunt obcaecati optio perspiciatis placeat quas quisquam sapiente sit tempore voluptatem voluptatum.</td>
+          </tr>
+        </tbody>
+      </table>
+      <blockquote>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium aliquam asperiores deleniti ipsum itaque neque officiis quibusdam quo ratione sint!</blockquote>
+    </div>
+
+    <script>
+      new FroalaEditor('#example', {
+        toolbarButtons: [
+          'bold', 'italic', 'align', 'paragraphFormatExtended', 'formatOL', 'formatUL', 'insertHR', 'insertTable', 'quote'
+        ],
+        paragraphFormatExtended: [
+          {title: 'Normal'},
+          {tag: 'h1', title: 'Heading 1'},
+          {tag: 'h2', title: 'Heading 2'},
+          {tag: 'h2', 'class': 'fr-text-bordered', title: 'Header 2 bordered'},
+          {tag: 'pre', id: 'code', title: 'Code'}
+        ],
+        paragraphFormatExtendedSelection: true
+      });
+    </script>
+  </body>
+</html>
