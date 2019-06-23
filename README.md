@@ -151,6 +151,12 @@ The source code is located in the `src` directory. Do the following to modify an
 2. Open a console, go to the project root directory and run `npm install`.
 3. Run `npm run build` to compile distribution files from the source files.
 
+### Testing
+
+Build the source code, open the [index.html](index.html) file in a browser and test it manually.
+
+Rebuild the source code and reload the browser page manually when you change the source code. 
+
 
 ## Versions compatibility
 
