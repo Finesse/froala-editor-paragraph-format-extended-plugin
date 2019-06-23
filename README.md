@@ -1,12 +1,15 @@
 # [Froala Editor](http://github.com/froala/wysiwyg-editor/) Paragraph Format Extended plugin
 
 [![npm](https://img.shields.io/npm/v/froala-editor-paragraph-format-extended-plugin.svg)](https://www.npmjs.com/package/froala-editor-paragraph-format-extended-plugin)
-![Supported Froala Editor versions](https://img.shields.io/badge/Froala_Editor-v2-brightgreen.svg)
+![Supported Froala Editor versions](https://img.shields.io/badge/Froala_Editor-v3-brightgreen.svg)
 [![Gzip size](https://badgen.net/bundlephobia/minzip/froala-editor-paragraph-format-extended-plugin?color=green)](https://bundlephobia.com/result?p=froala-editor-paragraph-format-extended-plugin)
 
 A plugin for Froala WYSIWYG Editor v3 that allows to choose paragraph format (tag name, 
 class, etc.) from a list. It is like a mixture of the `paragraphFormat` and the `paragraphStyle` plugins with some 
 extended features.
+
+If you need a plugin for Froala Editor v2, use [version 0.1](http://github.com/Finesse/froala-editor-paragraph-format-extended-plugin/tree/froala-v2).
+It won't get new features.
 
 
 ## Status
