@@ -86,48 +86,57 @@ _froalaEditor.default.PLUGINS.paragraphFormatExtended = function (editor) {
   function apply(id) {
     var format = getIdFormat(id);
     var tag = format.tag || editor.html.defaultTag();
-    var doesNeedBlock = format['class'] || format.id;
+    var doesNeedBlock = format.class || format.id;
     editor.selection.save();
     editor.html.wrap(true, true, true, true, true);
     editor.selection.restore();
-    var $blocks = $(editor.selection.blocks()); // `editor.selection.blocks` returns nested blocks. We need to process only deepest children to prevent
+    var blocks = editor.selection.blocks(); // `editor.selection.blocks` returns nested blocks. We need to process only deepest children to prevent
     // multiple style applying for nested blocks. This array keeps the list of original and processed blocks. So
     // if a being processed block contains any block from this list, it is skipped.
 
-    var $blocksToCheck = $blocks;
+    var blocksToCheck = Array.prototype.slice.call(blocks);
     editor.selection.save();
     editor.$el.find('pre').attr('skip', true);
-    $blocks.each(function (_, block) {
+    blocks.forEach(function (block) {
       if (editor.node.isList(block)) {
         return;
       }
 
-      var $block = $(block);
-
-      if ($block.find($blocksToCheck).length) {
+      if (blocksToCheck.some(function (blockToCheck) {
+        return blockToCheck !== block && block.contains(blockToCheck);
+      })) {
         return;
       }
 
       var substitute;
 
-      if ($block.is('li')) {
+      if (block.tagName === 'LI') {
         substitute = substituteLi;
-      } else if ($block.parent().is('li')) {
+      } else if (block.parentNode.tagName === 'LI') {
         substitute = substituteLiChild;
-      } else if ($block.parent().is('td, th')) {
+      } else if (['TD', 'TH'].indexOf(block.parentNode.tagName) !== -1) {
         substitute = substituteTableCellChild;
       } else {
         substitute = substituteOther;
       }
 
-      var $blockNew = substitute($block, tag, doesNeedBlock);
+      var $blockNew = substitute($(block), tag, doesNeedBlock);
 
       if ($blockNew) {
-        $blockNew.attr({
-          'class': format['class'] || null,
-          id: format.id || null
+        $blockNew.each(function (_, blockNew) {
+          // A null value of the attr method argument doesn't remove the attribute in the embedded version of jQuery
+          for (var _i = 0, _arr = ['id', 'class']; _i < _arr.length; _i++) {
+            var property = _arr[_i];
+
+            if (format[property]) {
+              blockNew.setAttribute(property, format[property]);
+            } else {
+              blockNew.removeAttribute(property);
+            }
+          }
+
+          blocksToCheck.push(blockNew);
         });
-        $blocksToCheck = $blocksToCheck.add($blockNew);
       }
     });
     editor.$el.find('pre:not([skip="true"]) + pre:not([skip="true"])').each(function (_, element) {
@@ -148,10 +157,10 @@ _froalaEditor.default.PLUGINS.paragraphFormatExtended = function (editor) {
 
   function refreshDropdown($dropdown) {
     var blocks = editor.selection.blocks();
-    var query = getElementFormatIds(blocks[0]).map(function (FormatId) {
-      return ".fr-command[data-param1=\"".concat(FormatId, "\"]");
+    var query = getElementFormatIds(blocks[0]).map(function (formatId) {
+      return ".fr-command[data-param1=\"".concat(formatId, "\"]");
     }).join(', ');
-    $dropdown.find(query).addClass('fr-active');
+    $dropdown.find(query).addClass('fr-active').attr("aria-selected", true);
   }
   /**
    * Updates toolbar button view in order to correspond currently selected block format.
@@ -166,12 +175,12 @@ _froalaEditor.default.PLUGINS.paragraphFormatExtended = function (editor) {
     }
 
     var blocks = editor.selection.blocks();
-    var FormatIds = getElementFormatIds(blocks[0]);
+    var formatIds = getElementFormatIds(blocks[0]);
     var formats = editor.opts.paragraphFormatExtended;
     var title = "\u2014"; // M-dash
 
     for (var i = 0; i < formats.length; ++i) {
-      if (FormatIds.indexOf(getFormatId(formats[i])) !== -1) {
+      if (formatIds.indexOf(getFormatId(formats[i])) !== -1) {
         title = editor.language.translate(formats[i].title);
         break;
       }
@@ -195,7 +204,7 @@ _froalaEditor.default.PLUGINS.paragraphFormatExtended = function (editor) {
       format = {
         tag: element.tagName.toLowerCase(),
         id: element.getAttribute('id'),
-        'class': element.getAttribute('class')
+        class: element.getAttribute('class')
       };
 
       if (['li', 'td', 'th'].indexOf(format.tag) !== -1) {
@@ -306,7 +315,10 @@ _froalaEditor.default.PLUGINS.paragraphFormatExtended = function (editor) {
       tag = "div class=\"fr-temp-div\"".concat(editor.node.isEmpty($block[0], true) ? ' data-empty="true"' : '');
     }
 
-    var $blockNew = $("<".concat(tag, " ").concat(editor.node.attributes($block[0]), ">")).html($block.html());
+    var $blockNew = $("<".concat(tag, " ").concat(editor.node.attributes($block[0]), ">")).html($block.html()).removeAttr('data-empty');
+    console.log({
+      $blockNew: $blockNew
+    });
     $block.replaceWith($blockNew);
     return $blockNew;
   }
@@ -390,7 +402,7 @@ _froalaEditor.default.RegisterCommand('paragraphFormatExtended', {
       var tag = format.tag || _this.html.defaultTag();
 
       var formatId = getFormatId(format);
-      return "<li>" + "<".concat(tag).concat(format['class'] ? " class=\"".concat(format['class'], "\"") : '', " style=\"padding: 0 !important; margin: 0 !important;\">") + "<a class=\"fr-command\" data-cmd=\"paragraphFormatExtended\" data-param1=\"".concat(formatId, "\" title=\"").concat(title, "\">") + title + "</a>" + "</".concat(tag, ">") + "</li>";
+      return "<li>" + "<".concat(tag).concat(format.class ? " class=\"".concat(format.class, "\"") : '', " style=\"padding: 0 !important; margin: 0 !important;\">") + "<a class=\"fr-command\" data-cmd=\"paragraphFormatExtended\" data-param1=\"".concat(formatId, "\" title=\"").concat(title, "\">") + title + "</a>" + "</".concat(tag, ">") + "</li>";
     }).join("\n");
     return "<ul class=\"fr-dropdown-list\">".concat(itemsHTML, "</ul>");
   },
@@ -449,8 +461,8 @@ function getFormatId(format) {
     str += "#".concat(format.id);
   }
 
-  if (format['class']) {
-    str += (format['class'] instanceof Array ? format['class'] : String(format['class']).split(/\s+/)).filter(function (part) {
+  if (format.class) {
+    str += (format.class instanceof Array ? format.class : String(format.class).split(/\s+/)).filter(function (part) {
       return part;
     }).sort().map(function (part) {
       return ".".concat(part);
@@ -474,7 +486,7 @@ function getIdFormat(id) {
     return {
       tag: parts[1].toLowerCase() || null,
       id: parts[2].slice(1) || null,
-      'class': parts[3].split('.').filter(function (part) {
+      class: parts[3].split('.').filter(function (part) {
         return part;
       }).join(' ') || null
     };

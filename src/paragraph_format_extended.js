@@ -63,53 +63,57 @@ FroalaEditor.PLUGINS.paragraphFormatExtended = editor => {
   function apply(id) {
     const format = getIdFormat(id);
     const tag = format.tag || editor.html.defaultTag();
-    const doesNeedBlock = format['class'] || format.id;
+    const doesNeedBlock = format.class || format.id;
 
     editor.selection.save();
     editor.html.wrap(true, true, true, true, true);
     editor.selection.restore();
 
-    const $blocks = $(editor.selection.blocks());
+    const blocks = editor.selection.blocks();
 
     // `editor.selection.blocks` returns nested blocks. We need to process only deepest children to prevent
     // multiple style applying for nested blocks. This array keeps the list of original and processed blocks. So
     // if a being processed block contains any block from this list, it is skipped.
-    let $blocksToCheck = $blocks;
+    const blocksToCheck = Array.prototype.slice.call(blocks);
 
     editor.selection.save();
     editor.$el.find('pre').attr('skip', true);
 
-    $blocks.each((_, block) => {
+    blocks.forEach(block => {
       if (editor.node.isList(block)) {
         return;
       }
 
-      const $block = $(block);
-
-      if ($block.find($blocksToCheck).length) {
+      if (blocksToCheck.some(blockToCheck => blockToCheck !== block && block.contains(blockToCheck))) {
         return;
       }
 
       let substitute;
 
-      if ($block.is('li')) {
+      if (block.tagName === 'LI') {
         substitute = substituteLi;
-      } else if ($block.parent().is('li')) {
+      } else if (block.parentNode.tagName === 'LI') {
         substitute = substituteLiChild;
-      } else if ($block.parent().is('td, th')) {
+      } else if (['TD', 'TH'].indexOf(block.parentNode.tagName) !== -1) {
         substitute = substituteTableCellChild;
       } else {
         substitute = substituteOther;
       }
 
-      const $blockNew = substitute($block, tag, doesNeedBlock);
+      const $blockNew = substitute($(block), tag, doesNeedBlock);
 
       if ($blockNew) {
-        $blockNew.attr({
-          'class': format['class'] || null,
-          id:      format.id || null
+        $blockNew.each((_, blockNew) => {
+          // A null value of the attr method argument doesn't remove the attribute in the embedded version of jQuery
+          for (const property of ['id', 'class']) {
+            if (format[property]) {
+              blockNew.setAttribute(property, format[property]);
+            } else {
+              blockNew.removeAttribute(property);
+            }
+          }
+          blocksToCheck.push(blockNew);
         });
-        $blocksToCheck = $blocksToCheck.add($blockNew);
       }
     });
 
@@ -133,10 +137,10 @@ FroalaEditor.PLUGINS.paragraphFormatExtended = editor => {
   function refreshDropdown($dropdown) {
     const blocks = editor.selection.blocks();
     const query = getElementFormatIds(blocks[0])
-			.map(FormatId => `.fr-command[data-param1="${FormatId}"]`)
+			.map(formatId => `.fr-command[data-param1="${formatId}"]`)
 			.join(', ');
 
-    $dropdown.find(query).addClass('fr-active');
+    $dropdown.find(query).addClass('fr-active').attr("aria-selected", true);
   }
 
   /**
@@ -150,12 +154,12 @@ FroalaEditor.PLUGINS.paragraphFormatExtended = editor => {
     }
 
     const blocks = editor.selection.blocks();
-    const FormatIds = getElementFormatIds(blocks[0]);
+    const formatIds = getElementFormatIds(blocks[0]);
     const formats = editor.opts.paragraphFormatExtended;
     let title = "\u2014";	// M-dash
 
     for (let i = 0; i < formats.length; ++i) {
-      if (FormatIds.indexOf(getFormatId(formats[i])) !== -1) {
+      if (formatIds.indexOf(getFormatId(formats[i])) !== -1) {
         title = editor.language.translate(formats[i].title);
         break;
       }
@@ -176,9 +180,9 @@ FroalaEditor.PLUGINS.paragraphFormatExtended = editor => {
 
     if (element instanceof HTMLElement) {
       format = {
-        tag:     element.tagName.toLowerCase(),
-        id:      element.getAttribute('id'),
-        'class': element.getAttribute('class')
+        tag:   element.tagName.toLowerCase(),
+        id:    element.getAttribute('id'),
+        class: element.getAttribute('class')
       };
 
       if (['li', 'td', 'th'].indexOf(format.tag) !== -1) {
@@ -284,7 +288,8 @@ FroalaEditor.PLUGINS.paragraphFormatExtended = editor => {
       tag = `div class="fr-temp-div"${editor.node.isEmpty($block[0], true) ? ' data-empty="true"' : ''}`;
     }
 
-    const $blockNew = $(`<${tag} ${editor.node.attributes($block[0])}>`).html($block.html());
+    const $blockNew = $(`<${tag} ${editor.node.attributes($block[0])}>`).html($block.html()).removeAttr('data-empty');
+    console.log({$blockNew});
     $block.replaceWith($blockNew);
     return $blockNew;
   }
@@ -365,7 +370,7 @@ FroalaEditor.RegisterCommand('paragraphFormatExtended', {
 				const formatId = getFormatId(format);
 
 				return `<li>` +
-					`<${tag}${format['class'] ? ` class="${format['class']}"` : ''} style="padding: 0 !important; margin: 0 !important;">` +
+					`<${tag}${format.class ? ` class="${format.class}"` : ''} style="padding: 0 !important; margin: 0 !important;">` +
 					`<a class="fr-command" data-cmd="paragraphFormatExtended" data-param1="${formatId}" title="${title}">` +
 					title +
 					`</a>` +
@@ -430,8 +435,8 @@ function getFormatId(format) {
     str += `#${format.id}`;
   }
 
-  if (format['class']) {
-    str += (format['class'] instanceof Array ? format['class'] : String(format['class']).split(/\s+/))
+  if (format.class) {
+    str += (format.class instanceof Array ? format.class : String(format.class).split(/\s+/))
       .filter(part => part)
       .sort()
       .map(part => `.${part}`)
@@ -448,13 +453,13 @@ function getFormatId(format) {
  * @returns {Format}
  */
 function getIdFormat(id) {
-  const parts = /([^\.#]*)(#[^\.]+|.{0})(\.[\s\S]+|.{0})/.exec(id);
+  const parts = /([^.#]*)(#[^.]+|.{0})(\.[\s\S]+|.{0})/.exec(id);
 
   if (parts) {
     return {
-      tag:     parts[1].toLowerCase() || null,
-      id:      parts[2].slice(1) || null,
-      'class': parts[3].split('.').filter(part => part).join(' ') || null
+      tag:   parts[1].toLowerCase() || null,
+      id:    parts[2].slice(1) || null,
+      class: parts[3].split('.').filter(part => part).join(' ') || null
     };
   } else {
     return {};
