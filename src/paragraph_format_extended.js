@@ -105,11 +105,11 @@ FroalaEditor.PLUGINS.paragraphFormatExtended = editor => {
       if ($blockNew) {
         $blockNew.each((_, blockNew) => {
           // A null value of the attr method argument doesn't remove the attribute in the embedded version of jQuery
-          for (const property of ['id', 'class']) {
-            if (format[property]) {
-              blockNew.setAttribute(property, format[property]);
+          for (const attribute of ['id', 'class']) {
+            if (format[attribute]) {
+              blockNew.setAttribute(attribute, format[attribute]);
             } else {
-              blockNew.removeAttribute(property);
+              blockNew.removeAttribute(attribute);
             }
           }
           blocksToCheck.push(blockNew);
@@ -137,8 +137,8 @@ FroalaEditor.PLUGINS.paragraphFormatExtended = editor => {
   function refreshDropdown($dropdown) {
     const blocks = editor.selection.blocks();
     const query = getElementFormatIds(blocks[0])
-			.map(formatId => `.fr-command[data-param1="${formatId}"]`)
-			.join(', ');
+      .map(formatId => `.fr-command[data-param1="${formatId}"]`)
+      .join(', ');
 
     $dropdown.find(query).addClass('fr-active').attr("aria-selected", true);
   }
@@ -289,7 +289,6 @@ FroalaEditor.PLUGINS.paragraphFormatExtended = editor => {
     }
 
     const $blockNew = $(`<${tag} ${editor.node.attributes($block[0])}>`).html($block.html()).removeAttr('data-empty');
-    console.log({$blockNew});
     $block.replaceWith($blockNew);
     return $blockNew;
   }
@@ -340,7 +339,7 @@ FroalaEditor.RegisterCommand('paragraphFormatExtended', {
    */
   displaySelection(editor) {
     return editor.opts.paragraphFormatExtendedSelection;
-	},
+  },
 
   /**
    * Text displayed on button until selection format is determined (any text is selected in editor). Is used if
@@ -363,23 +362,25 @@ FroalaEditor.RegisterCommand('paragraphFormatExtended', {
    * @returns {String} HTML content
    */
   html() {
-  	const itemsHTML = this.opts.paragraphFormatExtended
-			.map(format => {
-				const title = this.language.translate(format.title);
-				const tag = format.tag || this.html.defaultTag();
-				const formatId = getFormatId(format);
+    const itemsHTML = this.opts.paragraphFormatExtended
+      .map(format => {
+        const title = this.language.translate(format.title);
+        const tag = format.tag || this.html.defaultTag();
+        const formatId = getFormatId(format);
+        // const shortcut = this.shortcuts.get(`paragraphFormatExtended.${formatId}`);
 
-				return `<li>` +
-					`<${tag}${format.class ? ` class="${format.class}"` : ''} style="padding: 0 !important; margin: 0 !important;">` +
-					`<a class="fr-command" data-cmd="paragraphFormatExtended" data-param1="${formatId}" title="${title}">` +
-					title +
-					`</a>` +
-					`</${tag}>` +
-					`</li>`;
-			})
-			.join("\n");
+        return `<li role="presentation">` +
+          `<${tag}${format.class ? ` class="${format.class}"` : ''}${format.id ? ` id="${format.id}"` : ''} style="padding: 0 !important; margin: 0 !important;" role="presentation">` +
+          `<a class="fr-command" tabIndex="-1" role="option" data-cmd="paragraphFormatExtended" data-param1="${formatId}" title="${title}">` +
+          title +
+          // (shortcut ? `<span class="fr-shortcut">{shortcut}</span>` : '') +
+          `</a>` +
+          `</${tag}>` +
+          `</li>`;
+      })
+      .join("\n");
 
-    return `<ul class="fr-dropdown-list">${itemsHTML}</ul>`;
+    return `<ul class="fr-dropdown-list" role="presentation">${itemsHTML}</ul>`;
   },
 
   /**

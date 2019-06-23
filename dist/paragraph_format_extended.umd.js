@@ -141,12 +141,12 @@
           $blockNew.each(function (_, blockNew) {
             // A null value of the attr method argument doesn't remove the attribute in the embedded version of jQuery
             for (var _i = 0, _arr = ['id', 'class']; _i < _arr.length; _i++) {
-              var property = _arr[_i];
+              var attribute = _arr[_i];
 
-              if (format[property]) {
-                blockNew.setAttribute(property, format[property]);
+              if (format[attribute]) {
+                blockNew.setAttribute(attribute, format[attribute]);
               } else {
-                blockNew.removeAttribute(property);
+                blockNew.removeAttribute(attribute);
               }
             }
 
@@ -331,9 +331,6 @@
       }
 
       var $blockNew = $("<".concat(tag, " ").concat(editor.node.attributes($block[0]), ">")).html($block.html()).removeAttr('data-empty');
-      console.log({
-        $blockNew: $blockNew
-      });
       $block.replaceWith($blockNew);
       return $blockNew;
     }
@@ -416,10 +413,12 @@
 
         var tag = format.tag || _this.html.defaultTag();
 
-        var formatId = getFormatId(format);
-        return "<li>" + "<".concat(tag).concat(format.class ? " class=\"".concat(format.class, "\"") : '', " style=\"padding: 0 !important; margin: 0 !important;\">") + "<a class=\"fr-command\" data-cmd=\"paragraphFormatExtended\" data-param1=\"".concat(formatId, "\" title=\"").concat(title, "\">") + title + "</a>" + "</".concat(tag, ">") + "</li>";
+        var formatId = getFormatId(format); // const shortcut = this.shortcuts.get(`paragraphFormatExtended.${formatId}`);
+
+        return "<li role=\"presentation\">" + "<".concat(tag).concat(format.class ? " class=\"".concat(format.class, "\"") : '').concat(format.id ? " id=\"".concat(format.id, "\"") : '', " style=\"padding: 0 !important; margin: 0 !important;\" role=\"presentation\">") + "<a class=\"fr-command\" tabIndex=\"-1\" role=\"option\" data-cmd=\"paragraphFormatExtended\" data-param1=\"".concat(formatId, "\" title=\"").concat(title, "\">") + title + // (shortcut ? `<span class="fr-shortcut">{shortcut}</span>` : '') +
+        "</a>" + "</".concat(tag, ">") + "</li>";
       }).join("\n");
-      return "<ul class=\"fr-dropdown-list\">".concat(itemsHTML, "</ul>");
+      return "<ul class=\"fr-dropdown-list\" role=\"presentation\">".concat(itemsHTML, "</ul>");
     },
 
     /**
@@ -495,7 +494,7 @@
 
 
   function getIdFormat(id) {
-    var parts = /([^\.#]*)(#[^\.]+|.{0})(\.[\s\S]+|.{0})/.exec(id);
+    var parts = /([^.#]*)(#[^.]+|.{0})(\.[\s\S]+|.{0})/.exec(id);
 
     if (parts) {
       return {
