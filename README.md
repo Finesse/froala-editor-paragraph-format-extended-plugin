@@ -1,4 +1,4 @@
-# [Froala Editor](http://github.com/froala/wysiwyg-editor/) Paragraph Format Extended plugin
+# [Froala Editor](http://github.com/froala/wysiwyg-editor/tree/v2) Paragraph Format Extended plugin
 
 [![npm](https://img.shields.io/npm/v/froala-editor-paragraph-format-extended-plugin.svg)](https://www.npmjs.com/package/froala-editor-paragraph-format-extended-plugin)
 ![Supported Froala Editor versions](https://img.shields.io/badge/Froala_Editor-v2-brightgreen.svg)
