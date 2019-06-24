@@ -73,7 +73,7 @@ You can find more information about installation of Froala Editor using AMD [the
 Install the plugin:
 
 ```bash
-npm install froala-editor-paragraph-format-extended-plugin --save
+npm install froala-editor-paragraph-format-extended-plugin@0.1 --save
 ```
 
 Require it:
